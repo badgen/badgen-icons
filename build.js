@@ -1,6 +1,12 @@
 const fs = require('fs')
 const { join, parse } = require('path')
 
+const noneSquareIconWidths = {
+  awesome: 20,
+  codeclimate: 18,
+  lgtm: 19
+}
+
 const genIcons = (iconFolder) => {
   const icons = {}
 
@@ -17,7 +23,11 @@ const genIcons = (iconFolder) => {
     const svgSource = fs.readFileSync(iconFile, 'utf8')
     const b64 = Buffer.from(svgSource).toString('base64')
 
-    icons[key] = `data:image/${imageType};base64,${b64}`
+    icons[key] = {
+      base64: `data:image/${imageType};base64,${b64}`,
+      width: noneSquareIconWidths[key] || 13,
+      height: 13
+    }
   })
 
   return icons
