@@ -1,12 +1,13 @@
 {
   "name": "badgen-icons",
   "description": "Badgen's icons",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": "badgen/icons",
   "author": "Amio <amio.cn@gmail.com>",
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "prePublishOnly": "npm run build"
   }
 }
