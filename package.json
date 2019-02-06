@@ -2,7 +2,7 @@
   "name": "badgen-icons",
   "description": "Badgen's icons",
   "version": "0.4.1",
-  "repository": "badgen/icons",
+  "repository": "badgen/badgen-icons",
   "author": "Amio <amio.cn@gmail.com>",
   "license": "ISC",
   "main": "index.js",
