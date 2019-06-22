@@ -5,7 +5,9 @@ const noneSquareIconWidths = {
   awesome: 20,
   codeclimate: 18,
   commonwl: 10,
-  lgtm: 19
+  lgtm: 19,
+  now: 15,
+  zeit: 15
 }
 
 const genIcons = (iconFolder) => {
