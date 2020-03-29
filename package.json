@@ -8,6 +8,6 @@
   "main": "index.js",
   "scripts": {
     "build": "node build.js",
-    "prepublishOnly": "npm run build"
+    "prepack": "npm run build"
   }
 }
