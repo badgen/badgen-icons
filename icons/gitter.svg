@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="#FFF">
-  <g>
-    <rect x="0.5" y="0.5" width="1" height="4.5"/>
-    <rect x="2.5" y="1.5" width="1" height="6.5"/>
-    <rect x="4.5" y="1.5" width="1" height="6.5"/>
-    <rect x="6.5" y="1.5" width="1" height="3.5"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="#fff"><path d="M.5.5h1V5h-1zM2.5 1.5h1V8h-1zM4.5 1.5h1V8h-1zM6.5 1.5h1V5h-1z"/></svg>
