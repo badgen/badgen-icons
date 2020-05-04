@@ -1,10 +1,5 @@
 {
     "version": 2,
-    "alias": "badgen-icons",
-    "builds": [
-        { "src": "index.js", "use": "@now/static" },
-        { "src": "preview.html", "use": "@now/static" }
-    ],
     "routes": [
         { "src": "/", "dest": "/preview.html" }
     ]
