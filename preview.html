@@ -3,10 +3,12 @@
     <style>
       body {
         font-size: 16px;
+        max-width: 800px;
+        margin: 0 auto;
       }
       #preview {
         text-align: center;
-        padding: 15vh 0;
+        padding: 8vh 0;
       }
       #preview svg {
         transform: scale(2);
@@ -19,23 +21,28 @@
         height: 30vh;
         width: 100%;
         font-size: 14px;
-        max-width: 800px;
-        margin: 0 auto;
         display: block;
+      }
+      #list {
+        margin: 10vh auto;
+        text-align: justify;
+      }
+      #list img {
+        margin: 0.2rem;
       }
     </style>
   </head>
   <body>
     <div id="preview"></div>
     <textarea id="markup" placeholder="paste svg markup"></textarea>
+    <div id="list"></div>
     <script>
       const markup = document.querySelector('#markup')
       const preview = document.querySelector('#preview')
+      const list = document.querySelector('#list')
 
-      function createBadge (svg) {
-        const base64 = svg
-          ? `data:image/svg+xml;base64,${btoa(markup.value)}`
-          : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+      function createBadge (dataURI) {
+        dataURI = dataURI || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
         return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53.6" height="30" viewBox="0 0 536 200">
           <linearGradient id="a" x2="0" y2="100%">
@@ -54,7 +61,7 @@
             <text x="267" y="148" textLength="224" fill="#000" opacity="0.25">icon</text>
             <text x="257" y="138" textLength="224">icon</text>
           </g>
-          <image x="40" y="35" width="130" height="130" xlink:href="${base64}"/>
+          <image x="40" y="35" width="130" height="130" xlink:href="${dataURI}"/>
         </svg>`
       }
 
@@ -63,8 +70,37 @@
 
       // update badge on input
       markup.oninput = function () {
-        preview.innerHTML = createBadge(markup.value)
+        const base64 = `data:image/svg+xml;base64,${btoa(markup.value)}`
+        preview.innerHTML = createBadge(base64)
       }
+
+      function exportFromString (str) {
+        const _globals = 'const __dirname = "";'
+        const _module = { exports: {} };
+        const _fn = new Function('module', 'exports', _globals + str);
+        _fn(_module, _module.exports);
+        return _module.exports
+      }
+
+      function requireModule (url) {
+        return fetch(url).then(async res => {
+          return exportFromString(await res.text())
+        })
+      }
+
+      // render badge gallery
+      requireModule('https://unpkg.com/badgen').then(({ badgen }) => {
+        requireModule('../index.js').then(icons => {
+          const badges = Object.keys(icons).map(name => badgen({
+            status: name,
+            subject: '',
+            icon: icons[name].base64,
+            iconWidth: icons[name].width
+          })).map(svg => `<img src='data:image/svg+xml;base64,${btoa(svg)}' />`)
+
+          list.innerHTML = badges.join('')
+        })
+      })
     </script>
   </body>
 <body>
