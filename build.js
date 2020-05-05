@@ -7,6 +7,7 @@ const noneSquareIconWidths = {
   commonwl: 10,
   lgtm: 19,
   now: 15,
+  npm: 20,
   zeit: 15
 }
 

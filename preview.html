@@ -14,7 +14,7 @@
         align-items: center;
         justify-content: center;
       }
-      #preview svg {
+      #preview svg, #preview img {
         transform: scale(2);
       }
       #markup {
@@ -54,45 +54,28 @@
       const preview = document.querySelector('#preview')
       const list = document.querySelector('#list')
 
-      function createBadge (dataURI) {
-        dataURI = dataURI || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-
-        return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53.6" height="30" viewBox="0 0 536 200">
-          <linearGradient id="a" x2="0" y2="100%">
-            <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
-            <stop offset="1" stop-opacity=".1"/>
-          </linearGradient>
-          <mask id="m"><rect width="536" height="200" rx="30" fill="#fff"/></mask>
-          <g mask="url(#m)">
-            <rect width="212" height="200" fill="#555"/>
-            <rect width="324" height="200" fill="#08C" x="212"/>
-            <rect width="536" height="200" fill="url(#a)"/>
-          </g>
-          <g fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-            <text x="172" y="148" textLength="0" fill="#000" opacity="0.25"/>
-            <text x="162" y="138" textLength="0"/>
-            <text x="267" y="148" textLength="224" fill="#000" opacity="0.25">icon</text>
-            <text x="257" y="138" textLength="224">icon</text>
-          </g>
-          <image x="40" y="35" width="130" height="130" xlink:href="${dataURI}"/>
-        </svg>`
-      }
+      const blankGIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
       // init badge
-      preview.innerHTML = createBadge()
+      // preview.innerHTML = createBadge()
 
       // update badge on input
       markup.oninput = function () {
-        const base64 = `data:image/svg+xml;base64,${btoa(markup.value)}`
-        preview.innerHTML = createBadge(base64)
+        const base64 = markup.value ? `data:image/svg+xml;base64,${btoa(markup.value)}` : blankGIF
+        preview.innerHTML = window.badgen({
+          status: 'icon',
+          subject: '',
+          icon: base64
+        })
       }
 
       // click
       list.addEventListener('click', e => {
         if (e.target.dataset.svg) {
           markup.value = e.target.dataset.svg
-          markup.oninput()
+          // markup.oninput()
           // preview.innerHTML = e.target.dataset.svg
+          preview.innerHTML = e.target.outerHTML
         }
       })
 
@@ -115,6 +98,13 @@
         requireModule('https://unpkg.com/badgen'),
         requireModule('../index.js')
       ]).then(([{ badgen }, icons]) => {
+        window.badgen = badgen
+        preview.innerHTML = badgen({
+          status: 'icon',
+          subject: '',
+          icon: blankGIF
+        })
+
         const badges = Object.keys(icons).map(name => {
           const icon = icons[name]
           const svg = badgen({
