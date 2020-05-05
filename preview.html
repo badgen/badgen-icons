@@ -8,7 +8,11 @@
       }
       #preview {
         text-align: center;
+        height: 50px;
         padding: 8vh 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       #preview svg {
         transform: scale(2);
@@ -24,11 +28,20 @@
         display: block;
       }
       #list {
-        margin: 10vh auto;
+        margin: 2rem auto;
         text-align: justify;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: spa;
       }
       #list img {
-        margin: 0.2rem;
+        margin: 3px;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
+      #list img:hover {
+        opacity: 1;
+        transform: scale(1.06);
       }
     </style>
   </head>
@@ -74,6 +87,15 @@
         preview.innerHTML = createBadge(base64)
       }
 
+      // click
+      list.addEventListener('click', e => {
+        if (e.target.dataset.svg) {
+          markup.value = e.target.dataset.svg
+          markup.oninput()
+          // preview.innerHTML = e.target.dataset.svg
+        }
+      })
+
       function exportFromString (str) {
         const _globals = 'const __dirname = "";'
         const _module = { exports: {} };
@@ -89,17 +111,22 @@
       }
 
       // render badge gallery
-      requireModule('https://unpkg.com/badgen').then(({ badgen }) => {
-        requireModule('../index.js').then(icons => {
-          const badges = Object.keys(icons).map(name => badgen({
+      Promise.all([
+        requireModule('https://unpkg.com/badgen'),
+        requireModule('../index.js')
+      ]).then(([{ badgen }, icons]) => {
+        const badges = Object.keys(icons).map(name => {
+          const icon = icons[name]
+          const svg = badgen({
             status: name,
             subject: '',
-            icon: icons[name].base64,
-            iconWidth: icons[name].width
-          })).map(svg => `<img src='data:image/svg+xml;base64,${btoa(svg)}' />`)
-
-          list.innerHTML = badges.join('')
+            icon: icon.base64,
+            iconWidth: icon.width
+          })
+          return `<img data-svg='${atob(icon.base64.slice(26))}' src='data:image/svg+xml;base64,${btoa(svg)}' />`
         })
+
+        list.innerHTML = badges.join('')
       })
     </script>
   </body>
