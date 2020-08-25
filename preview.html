@@ -44,6 +44,7 @@
         transform: scale(1.06);
       }
     </style>
+    <script src="https://unpkg.com/badgen"></script>
   </head>
   <body>
     <div id="preview"></div>
@@ -94,11 +95,7 @@
       }
 
       // render badge gallery
-      Promise.all([
-        requireModule('https://unpkg.com/badgen'),
-        requireModule('../index.js')
-      ]).then(([{ badgen }, icons]) => {
-        window.badgen = badgen
+      requireModule('../index.js').then(icons => {
         preview.innerHTML = badgen({
           status: 'icon',
           subject: '',
