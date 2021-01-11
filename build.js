@@ -1,4 +1,6 @@
-const fs = require('fs')
+'use strict'
+
+const { readdirSync, readFileSync, writeFileSync } = require('fs')
 const { join, parse } = require('path')
 
 const noneSquareIconWidths = {
@@ -12,33 +14,31 @@ const noneSquareIconWidths = {
   zeit: 15
 }
 
-const genIcons = (iconFolder) => {
-  const icons = {}
+const generateIcons = iconFolder => readdirSync(iconFolder).reduce((icons, filename) => {
+  const { name, ext } = parse(filename)
+  const imageType = {
+    '.svg': 'svg+xml',
+    '.png': 'png'
+  }[ext]
 
-  fs.readdirSync(join(__dirname, iconFolder)).forEach(filename => {
-    const imageType = {
-      '.svg': 'svg+xml',
-      '.png': 'png'
-    }[parse(filename).ext]
+  if (!imageType) return icons
 
-    if (!imageType) return
+  const iconFile = join(iconFolder, filename)
+  const svgSource = readFileSync(iconFile, 'utf8')
+  const b64 = Buffer.from(svgSource).toString('base64')
 
-    const key = parse(filename).name
-    const iconFile = join(__dirname, iconFolder, filename)
-    const svgSource = fs.readFileSync(iconFile, 'utf8')
-    const b64 = Buffer.from(svgSource).toString('base64')
-
-    icons[key] = {
-      base64: `data:image/${imageType};base64,${b64}`,
-      width: noneSquareIconWidths[key] || 13,
-      height: 13
-    }
-  })
-
+  icons[name] = {
+    base64: `data:image/${imageType};base64,${b64}`,
+    width: noneSquareIconWidths[name] || 13,
+    height: 13
+  }
   return icons
-}
+}, {})
 
-const icons = genIcons('icons')
+const inputDir = join(__dirname, 'icons')
+const outFile = join(__dirname, 'icons.json')
+
+const icons = generateIcons(inputDir)
 const json = JSON.stringify(icons, null, 2)
 
-fs.writeFileSync('index.js', `module.exports = ${json}`)
+writeFileSync(outFile, json)

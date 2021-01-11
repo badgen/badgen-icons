@@ -80,22 +80,10 @@
         }
       })
 
-      function exportFromString (str) {
-        const _globals = 'const __dirname = "";'
-        const _module = { exports: {} };
-        const _fn = new Function('module', 'exports', _globals + str);
-        _fn(_module, _module.exports);
-        return _module.exports
-      }
-
-      function requireModule (url) {
-        return fetch(url).then(async res => {
-          return exportFromString(await res.text())
-        })
-      }
+      const fetchJSON = (url, init) => fetch(url, init).then(resp => resp.json());
 
       // render badge gallery
-      requireModule('../index.js').then(icons => {
+      fetchJSON('../icons.json').then(icons => {
         preview.innerHTML = badgen({
           status: 'icon',
           subject: '',
