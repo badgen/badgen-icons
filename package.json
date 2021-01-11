@@ -1,11 +1,21 @@
 {
   "name": "badgen-icons",
-  "description": "Badgen's icons",
   "version": "0.18.0",
-  "repository": "badgen/badgen-icons",
-  "author": "Amio <amio.cn@gmail.com>",
+  "description": "Badgen's icons",
+  "homepage": "https://github.com/badgen/badgen-icons#readme",
+  "bugs": {
+    "url": "https://github.com/badgen/badgen-icons/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badgen/badgen-icons.git"
+  },
   "license": "ISC",
+  "author": "Amio <amio.cn@gmail.com>",
   "main": "index.js",
+  "files": [
+    "icons"
+  ],
   "scripts": {
     "build": "node build.js",
     "prepack": "npm run build"
