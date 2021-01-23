@@ -8,6 +8,7 @@ const noneSquareIconWidths = {
   lgtm: 19,
   now: 15,
   npm: 20,
+  peertube: 10,
   zeit: 15
 }
 
