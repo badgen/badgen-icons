@@ -7,6 +7,7 @@ const noneSquareIconWidths = {
   awesome: 20,
   codeclimate: 18,
   commonwl: 10,
+  devrant: 12,
   lgtm: 19,
   now: 15,
   npm: 20,
